@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>FintyouOS - 高性能安卓虚拟环境</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+:root {
+  --sys-name: "FintyouOS";
+  --sys-ver: "13.0.2.0";
+  --main-color: #cce0ff;
+  --theme-blue: #1677ff;
+  --text-dark: #1a1a1a;
+  --text-gray: #555;
+  --white: #ffffff;
+  --border: #d0e2ff;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--main-color);
+  color: var(--text-dark);
+  min-height: 100vh;
+  padding-top: 80px; /* 防止内容被固定导航栏遮住 */
+}
+
+/* 导航栏：固定在顶部，不会被挤下去 */
+header {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.76);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  padding: 0 24px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  box-shadow: 0 2px 8px rgba(22, 119, 255, 0.1);
+}
+
+.nav-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--theme-blue);
+}
+
+.nav-list {
+  display: flex;
+  gap: 36px;
+}
+
+.nav-list a {
+  color: var(--text-dark);
+  text-decoration: none;
+  font-size: 16px;
+  transition: 0.2s;
+}
+
+.nav-list a:hover {
+  color: var(--theme-blue);
+}
+
+/* 主容器 */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+/* 首页头部 */
+.hero {
+  text-align: center;
+  padding: 60px 0;
+}
+
+.hero h1 {
+  font-size: 48px;
+  margin-bottom: 16px;
+  color: var(--theme-blue);
+}
+
+.hero p {
+  font-size: 20px;
+  color: var(--text-gray);
+  margin-bottom: 12px;
+}
+
+.hero .ver-tag {
+  display: inline-block;
+  padding: 6px 16px;
+  background: var(--theme-blue);
+  color: white;
+  border-radius: 99px;
+  margin-top: 8px;
+}
+
+/* 通用区块 */
+.section {
+  margin: 60px 0;
+  background: var(--white);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 2px 12px rgba(22,119,255,0.08);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: 0.6s ease;
+}
+
+.section.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.section h2 {
+  font-size: 28px;
+  margin-bottom: 24px;
+  border-left: 6px solid var(--theme-blue);
+  padding-left: 12px;
+}
+
+.section h3 {
+  font-size: 20px;
+  margin: 20px 0 12px;
+}
+
+.section h4 {
+  font-size: 17px;
+  margin: 16px 0 8px;
+  color: var(--theme-blue);
+}
+
+.section p, li {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-gray);
+}
+
+ul {
+  padding-left: 22px;
+  margin: 10px 0;
+}
+
+.download-group {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.download-btn {
+  display: inline-block;
+  padding: 12px 28px;
+  background: var(--theme-blue);
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: 0.2s;
+}
+
+.download-btn:hover {
+  background: #0d5ed8;
+}
+
+.tip-text {
+  color: #d32f2f;
+  font-weight: 500;
+  margin: 12px 0;
+}
+
+/* 特性卡片 */
+.feature-wrap {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.feature-card {
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.feature-card h4 {
+  font-size: 22px;
+  margin-bottom: 12px;
+}
+
+/* 底部 */
+footer {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-gray);
+  font-size: 14px;
+}
+
+/* 移动端适配 */
+@media(max-width:768px) {
+  header {
+    padding: 0 16px;
+  }
+
+  .nav-wrap {
+    height: 72px;
+  }
+
+  .nav-list {
+    gap: 16px;
+  }
+
+  .nav-list a {
+    font-size: 14px;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  .hero h1 {
+    font-size: 32px;
+  }
+
+  .section h2 {
+    font-size: 22px;
+  }
+
+  .download-group {
+    flex-direction: column;
+  }
+
+  body {
+    padding-top: 72px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- 顶部导航：固定在顶部 -->
+<header>
+  <div class="nav-wrap">
+    <div class="logo" id="nav-logo"></div>
+    <nav class="nav-list">
+      <a href="#download">下载</a>
+      <a href="#compat">兼容性</a>
+      <a href="#feature">特性</a>
+      <!-- 新增博客链接 -->
+      <a href="https://fintyou.rf.gd/card/" target="_blank" rel="noopener noreferrer">博客</a>
+    </nav>
+  </div>
+</header>
+
+<div class="container">
+  <!-- 首页头部 -->
+  <div class="hero">
+    <h1 id="hero-title"></h1>
+    <p>高性能安卓虚拟环境，安全隔离和美观实用并存的安卓虚拟机系统解决方案</p>
+    <div class="ver-tag">最新正式版：<span id="ver-text"></span></div>
+  </div>
+
+  <!-- 下载板块 -->
+  <section id="download" class="section">
+    <h2>下载</h2>
+    <div class="download-group">
+      <a href="https://fintyou.rf.gd/card/" class="download-btn">常规版(Android9.0)</a>
+      <a href="#" class="download-btn">兼容版 (Android9.0)</a>
+    </div>
+    <p>建议通过123云app打开</p>
+    <p class="tip-text">*建议把下边注意事项全看完了再回来下载，否则您可能会遇到各种问题</p>
+
+    <h3>如何安装、常见问题</h3>
+    <h4>安装虚拟机的方法</h4>
+    <ul>
+      <li>1.下载配套虚拟机框架安装包并安装</li>
+      <li>2.下载zip格式系统ROM包，不需要解压</li>
+      <li>3.在框架主页右上角找到加号入口</li>
+      <li>4.进入ROM添加页，点击右上角菜单，导入本地ROM</li>
+      <li>5.等待解析完成，启动并完成初始化向导</li>
+      <li>6.进入桌面即可正常使用 <span id="sys-name"></span></li>
+    </ul>
+
+    <h4>常见问题</h4>
+    <ul>
+      <li>1.首次开机加载时间较长，请耐心等待；务必给予悬浮窗权限，后台不会被系统清理</li>
+      <li>2.导入ROM只显示文件夹：开启框架「所有文件访问权限」</li>
+      <li>3.兼容版设备必须使用对应框架版本，否则无法进入系统</li>
+      <li>4.安卓11~16全系列均适配，无法启动优先检查权限与系统限制设置</li>
+    </ul>
+  </section>
+
+  <!-- 兼容性板块 -->
+  <section id="compat" class="section">
+    <h2>兼容性说明(不看不会用)</h2>
+
+    <h3>1 需要兼容版的设备</h3>
+    <h4>重要提示</h4>
+    <p>以下处理器需要使用兼容版：</p>
+    <ul>
+      <li>骁龙8 Elite Gen5、骁龙8s Gen4、骁龙8至尊、骁龙8至尊领先版</li>
+      <li>天玑9500、天玑9400、天玑9400+、天玑9300、天玑9300+</li>
+      <li>骁龙8 Gen3、骁龙8s Gen3</li>
+      <li>骁龙7(s)Gen3及以上</li>
+      <li>天玑8300全系、天玑7300全系</li>
+      <li>荣耀新款分家机型</li>
+    </ul>
+    <p>兼容版与标准版功能完全一致，仅针对新一代处理器架构做适配优化。</p>
+
+    <h3>2 安卓系统进程限制解除</h3>
+    <p>Android12及以上系统限制后台子进程上限32，虚拟机进程数量超出限制，会出现频繁卡死，需手动解除限制。</p>
+
+    <h4>安卓14/15以上设备：</h4>
+    <ul>
+      <li>1. 设置 → 关于本机，连续点击版本号开启开发者模式</li>
+      <li>2. 进入开发者选项，开启「停止限制子进程」</li>
+      <li>3. OPPO/一加/真我设备额外开启「停止权限监控」</li>
+      <li>4. 框架弹出激活提示直接忽略，选择本地虚拟机</li>
+    </ul>
+
+    <h4>安卓12-13 / 新款荣耀设备：</h4>
+    <p>无「停止限制子进程」开关，直接使用ADB命令解除进程限制即可。</p>
+
+    <h4>鸿蒙设备(鸿蒙3.0+/安卓12以上)：</h4>
+    <p>需电脑连接手机执行ADB脚本解除系统进程限制。</p>
+
+    <h4>安卓11及以下设备：</h4>
+    <p>无进程限制，直接安装使用；启动卡在99%耐心等待加载完成。</p>
+  </section>
+
+  <!-- 系统特性板块 -->
+  <section id="feature" class="section">
+    <h2><span id="sys-name">有哪些优势</span></h2>
+    <div class="feature-wrap">
+      <div class="feature-card">
+        <h4>⚡极致性能</h4>
+        <p>针对新款移动处理器深度优化，接近原生安卓流畅运行体验</p>
+      </div>
+      <div class="feature-card">
+        <h4>🎊全新界面</h4>
+        <p>全新定制UI界面，细腻动画过渡，视觉质感大幅升级</p>
+      </div>
+      <div class="feature-card">
+        <h4>🔄广泛兼容</h4>
+        <p>覆盖Android9至Android16全系列手机，新旧旗舰均可稳定运行</p>
+      </div>
+      <div class="feature-card">
+        <h4>🛠持续维护</h4>
+        <p>支持系统在线增量更新，持续迭代优化功能与兼容性</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <p>版权所有 © Fintyoy个人团队 2023-2026 保留一切权利. 萌ICP备20269010号</p>
+    <a href="https://icp.gov.moe/?keyword=20269010" target="_blank">萌ICP备20269010号</a >
+</footer>
+
+<script>
+const SYS_CONFIG = {
+  sysName: "FintyouOS",
+  version: "13.0.2.0",
+  officialUrl: "https://www.geometryos.cn",
+  linkDownloadStd: "#",
+  linkDownloadCompat: "#",
+  linkAdbGuide: "#"
+};
+
+document.getElementById("nav-logo").innerText = SYS_CONFIG.sysName;
+document.getElementById("hero-title").innerText = SYS_CONFIG.sysName;
+document.getElementById("ver-text").innerText = SYS_CONFIG.version;
+
+document.querySelectorAll("#sys-name").forEach(el => {
+  el.innerText = SYS_CONFIG.sysName;
+});
+
+const sections = document.querySelectorAll(".section");
+const observer = new IntersectionObserver(list => {
+  list.forEach(item => {
+    if (item.isIntersecting) item.target.classList.add("show");
+  });
+}, { threshold: 0.1 });
+
+sections.forEach(sec => observer.observe(sec));
+</script>
+
+</body>
+</html>
